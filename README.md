@@ -38,7 +38,9 @@ I am in debt of course with Daniel P. Friedman, Matthias Felleisen and Duane Bib
 Any feedback is welcome.
 
 (*) itself a number, a string or a function
+
 (**) itself certainly a function
+
 (***) see http://spencertipping.com/js-instabench/ - please compare:
   - allocating small structures -> 1M (int, int) pairs as array literals
   - allocating small structures -> 1M (int, int) pairs as binary CPS closures
