@@ -42,7 +42,7 @@ function remberStar(a, list) {
 	else return cons(remberStar(a, car(list)), remberStar(a, cdr(list)))
 }
 
-// rember (a,b) ((a,b,(a,b)) -> (a,b)  ossia rimuove solo S-list complete
+// rember (a,b) ((a,b,(a,b)) -> (a,b)  that's to say it removes only S-list COMPLETELY matched
 function rember(s1, s2) {
 	if (isEmpty(s2)) return EMPTY;
 	else if (equal(s1, car(s2))) return cdr(s2)  // S-expressions require EQUAL!!!!!
