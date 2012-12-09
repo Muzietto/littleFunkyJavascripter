@@ -162,6 +162,53 @@ YAHOO.LFJ.test.oTestIsMember = new YAHOO.tool.TestCase({
 	}
 });
 
+// chapter 8
+YAHOO.LFJ.test.oTestMultiremberAndCo = new YAHOO.tool.TestCase({
+	name : "TestMultiremberAndCo",
+	testMultiremberAndCo : function() {
+		//  make list without, list with and cons their lengths
+		var lengthsCollector = function(removed,left) {return cons(size(removed),cons(size(left),EMPTY));}
+		var input = List('a',true,123,'b','a')
+		var output = multiremberAndCo('a', input, lengthsCollector)
+		Assert.isTrue(eqlist(ArrayToList([3,2]), output))
+	}
+});
+
+YAHOO.LFJ.test.oTestMultiinsertLrAndCo = new YAHOO.tool.TestCase({
+	name : "TestMultiinsertLrAndCo",
+	testMultiinsertLrAndCo : function() {
+		var myCollector = function(insertionResult, numLeftInsertions, numRightInsertions) {
+			return pick(numLeftInsertions+numRightInsertions, insertionResult)
+		}
+		var input = List('chips','and','fish','or','fish','and','chips')
+		Assert.areEqual('salty', multiinsertLrAndCo('salty', 'fish', 'chips', input, myCollector))
+	}
+});
+
+YAHOO.LFJ.test.oTestEvensOnlyStar = new YAHOO.tool.TestCase({
+	name : "TestEvensOnlyStar",
+	testEvensOnlyStar : function() {
+		var input = ArrayToList([[1],2,3,[4,[7,8,[]],5,6,[9,[10]]]]);
+		//Assert.isTrue(eqlist(ArrayToList([[],2,[4,[8,[]],6,[[10]]]]), evensOnlyStar(input)));
+	}
+});
+
+YAHOO.LFJ.test.oTestEvensOnlyStarAndCo = new YAHOO.tool.TestCase({
+	name : "TestEvensOnlyStarAndCo",
+	testEvensOnlyStarAndCo : function() {
+		var input = ArrayToList([[1],2,3,[4,[7,8,[]],5,6,[9,[10]]]]);
+		var oddAdder = function (listOfNumbers) {
+			var innerOddAdder = function (list, acc) {
+				if (isEmpty(listOfNumbers)) return acc;
+				else return innerOddAdder(cdr(list),acc+car(list));
+			}
+			return innerOddAdder(listOfNumbers,0)
+		}
+		//Assert.areEqual(25, evensOnlyStarAndCo(input,oddAdder))
+	}
+});
+
+
 YAHOO.util.Event
 		.onDOMReady(function() {
 		
@@ -196,7 +243,16 @@ YAHOO.util.Event
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestRember);
 					
-			var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestMultiremberAndCo);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestMultiinsertLrAndCo);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestEvensOnlyStar);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestEvensOnlyStarAndCo);
+
+					var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
 			logger.hideCategory("info");
 
 			YAHOO.tool.TestRunner

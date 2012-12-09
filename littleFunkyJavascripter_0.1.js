@@ -32,7 +32,7 @@ function eqlist(s1, s2) { // both s1 and s2 must be a list (possibly empty!!!)
 	//  NB - "return (equal(cars) && equal(cdrs))" would work as well
 }
 
-// remberStar 'b' (a,(b),b) -> (a,())
+// remberStar 'b' (a,(b),b) -> (a,()) that's to say it removes ATOMS and DOES recur inside sublists
 function remberStar(a, list) {
 	if (isEmpty(list)) return EMPTY;
 	else if (isAtom(car(list))) {
@@ -42,14 +42,12 @@ function remberStar(a, list) {
 	else return cons(remberStar(a, car(list)), remberStar(a, cdr(list)))
 }
 
-// rember (a,b) ((a,b,(a,b)) -> (a,b)  that's to say it removes only S-list COMPLETELY matched
+// rember (a,b) ((a,b,(a,b)) -> (a,b)  that's to say it removes only S-list COMPLETELY matched and NO RECURSION inside sublists
 function rember(s1, s2) {
 	if (isEmpty(s2)) return EMPTY;
 	else if (equal(s1, car(s2))) return cdr(s2)  // S-expressions require EQUAL!!!!!
 	else return cons(car(s2), rember(s1, cdr(s2)))
 }
-
-
 
 // chapter 7
 function isSet(list) {
@@ -90,3 +88,43 @@ function union(set1,set2){
 	else if (isMember(head(set1),set2)) return union(tail(set1),set2);
 	else return cons(head(set1),union(tail(set1),set2));
 }
+
+// chapter 8
+function multiremberAndCo(a, lat, col) {
+	if (isEmpty(lat)) return col(EMPTY, EMPTY);
+	else if (equal(car(lat), a)) return multiremberAndCo(
+		a, cdr(lat), function(removed, left) {
+			return col(removed, cons(car(lat),left));
+		}
+	);
+	else return multiremberAndCo(
+		a, cdr(lat), function(removed, left) {
+			return col(cons(car(lat),removed), left)
+		}
+	);
+}
+
+function multiinsertLrAndCo(newAtom, oldL, oldR, lat, col) {
+	if (isEmpty(lat)) return col(EMPTY,0,0)
+	else if (equal(car(lat),oldL)) return multiinsertLrAndCo(
+		newAtom, oldL, oldR, cdr(lat), function(result, numL, numR) {
+			return col(cons(newAtom,cons(oldL,result)),numL+1,numR);
+		}
+	);
+	else if (equal(car(lat),oldR)) return multiinsertLrAndCo(
+		newAtom, oldL, oldR, cdr(lat), function(result, numL, numR) {
+			return col(cons(oldR,cons(newAtom,result)),numL,numR+1);
+		}
+	);
+	else return multiinsertLrAndCo(
+		newAtom, oldL, oldR, cdr(lat), function(result, numL, numR) {
+			return col(cons(car(lat),result), numL, numR)
+		}
+	);
+}
+
+function evensOnly(a, lat) {
+	
+}
+
+
