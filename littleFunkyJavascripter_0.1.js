@@ -123,8 +123,42 @@ function multiinsertLrAndCo(newAtom, oldL, oldR, lat, col) {
 	);
 }
 
-function evensOnly(a, lat) {
-	
+function evensOnly(lat) {
+	if (isEmpty(lat)) return EMPTY
+	else if (car(lat) % 2 != 0) return evensOnly(cdr(lat))
+	else return cons(car(lat),evensOnly(cdr(lat)))
 }
+
+function evensOnlyStarAndCo(list, col){
+	if (isEmpty(list)) return col(EMPTY, 1, 0);
+	else if (isAtom(car(list))) {
+		if (car(list) % 2 === 0) {  // even atoms -->
+			return evensOnlyStarAndCo(cdr(list), function(ll, product, sum){
+				return col(cons(car(list),ll),car(list)*product,sum);
+			});
+		} else {  // odd atoms
+			return evensOnlyStarAndCo(cdr(list), function(ll, product, sum){
+				return col(ll,product,car(list)+sum);
+			});
+		}
+	}
+	// car(list) is a list
+	else return evensOnlyStarAndCo(car(list), function(al, ap, as) {
+		return evensOnlyStarAndCo(cdr(list), function(dl,dp,ds) {
+			return col(cons(al,dl),ap*dp,as+ds);
+		});
+	});
+}
+
+function evensOnlyStar(list) {
+	if (isEmpty(list)) return EMPTY
+	else if (isAtom(car(list))) {
+		if (car(list) % 2 != 0) return evensOnlyStar(cdr(list))
+		else return cons(car(list),evensOnlyStar(cdr(list)))
+	}
+	else return cons(evensOnlyStar(car(list)),evensOnlyStar(cdr(list)))
+}
+
+
 
 

@@ -185,29 +185,35 @@ YAHOO.LFJ.test.oTestMultiinsertLrAndCo = new YAHOO.tool.TestCase({
 	}
 });
 
+YAHOO.LFJ.test.oTestEvensOnly = new YAHOO.tool.TestCase({
+	name : "TestEvensOnly",
+	testEvensOnly : function() {
+		Assert.isTrue(eqlist(ArrayToList([2,4,6,8,10]), evensOnly(ArrayToList([1,2,3,4,5,6,7,8,9,10]))));
+	}
+});
+
 YAHOO.LFJ.test.oTestEvensOnlyStar = new YAHOO.tool.TestCase({
 	name : "TestEvensOnlyStar",
 	testEvensOnlyStar : function() {
 		var input = ArrayToList([[1],2,3,[4,[7,8,[]],5,6,[9,[10]]]]);
-		//Assert.isTrue(eqlist(ArrayToList([[],2,[4,[8,[]],6,[[10]]]]), evensOnlyStar(input)));
+		var output = evensOnlyStar(input);
+		Assert.isTrue(equal(ArrayToList([[],2,[4,[8,[]],6,[[10]]]]), output));
 	}
 });
 
 YAHOO.LFJ.test.oTestEvensOnlyStarAndCo = new YAHOO.tool.TestCase({
 	name : "TestEvensOnlyStarAndCo",
 	testEvensOnlyStarAndCo : function() {
+//		var input = ArrayToList([[1],2,3,[4,[7,8,[]],5,6,[9,[10]]]]);
 		var input = ArrayToList([[1],2,3,[4,[7,8,[]],5,6,[9,[10]]]]);
-		var oddAdder = function (listOfNumbers) {
-			var innerOddAdder = function (list, acc) {
-				if (isEmpty(listOfNumbers)) return acc;
-				else return innerOddAdder(cdr(list),acc+car(list));
-			}
-			return innerOddAdder(listOfNumbers,0)
+		var oddAdder = function (listOfNumbers, productOfEvens, sumOfOdds) {
+			return cons(listOfNumbers,cons(productOfEvens,cons(sumOfOdds,EMPTY)));
 		}
-		//Assert.areEqual(25, evensOnlyStarAndCo(input,oddAdder))
+		var output = evensOnlyStarAndCo(input,oddAdder)
+//		Assert.isTrue(equal(ArrayToList([[[],2],2,1]), output));
+		Assert.isTrue(equal(ArrayToList([[[],2,[4,[8,[]],6,[[10]]]],3840,25]), output));
 	}
 });
-
 
 YAHOO.util.Event
 		.onDOMReady(function() {
@@ -247,6 +253,8 @@ YAHOO.util.Event
 					.add(YAHOO.LFJ.test.oTestMultiremberAndCo);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestMultiinsertLrAndCo);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestEvensOnly);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestEvensOnlyStar);
 			YAHOO.LFJ.test.LFJ_TestSuite
