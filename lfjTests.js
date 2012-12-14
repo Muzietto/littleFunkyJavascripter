@@ -239,6 +239,23 @@ YAHOO.LFJ.test.oTestProtoCombinatorComp = new YAHOO.tool.TestCase({
 	}
 });
 
+YAHOO.LFJ.test.oTestProtoCombinatorOfun = new YAHOO.tool.TestCase({
+	name : "TestProtoCombinatorOfun",
+	testProtoCombinatorOfun : function() {
+		var apples = ArrayToList(['a','p','p','l','e','s','a','p','p','l','e','s']);
+		// See notes at the definition of MAmaOfun inside littleFunkyJavascripter.js
+		var MAmaOfunLocal = function(MALE) { return MALE(MALE)}  // definition inside this test will work
+			(function(male){return function(oFun) { return function(list){return isEmpty(list)?0:1+oFun(cdr(list))}}(function(x){return male(male)(x)})});  // male = make-length in inner loop
+		Assert.areEqual(12,MAmaOfunLocal(apples));
+		try{  // using the definition in the library file
+			var result = MAmaOfun(apples)   // definition outside this test will NOT work!
+			Assert.isTrue(false, 'MAmaOfun should be not-a-function')
+		} catch (err) {
+			Assert.isTrue(true)
+		}		
+	}
+});
+
 YAHOO.util.Event
 		.onDOMReady(function() {
 		
@@ -288,6 +305,8 @@ YAHOO.util.Event
 					.add(YAHOO.LFJ.test.oTestProtoCombinator);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestProtoCombinatorComp);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestProtoCombinatorOfun);
 
 					var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
 			logger.hideCategory("info");

@@ -170,7 +170,7 @@ var MAma = function(MALE) { return MALE(MALE)}  // MALE = make-length in outer l
 
 /* NB - the following function is the attempt at page 168 to extract 
 make-length(make-length) from the innermost loop. This function is shown to generate an infinite loop 
-I am calling male(male) a "composite", shortened in "comp".
+Instead of "lenght" (which is what the book does) I am calling male(male) a "composite", shortened in "comp".
 There is a test "TestProtoCombinatorComp" inside lfjTests.js and it fails - THIS FUNCTION WON'T WORK!!!
 ... BUT HAVE A LOOK AT THIS OTHERWISE STRANGE BEHAVIOR:
 - the need to declare it as var (see previous function MAma) still stands
@@ -179,6 +179,18 @@ There is a test "TestProtoCombinatorComp" inside lfjTests.js and it fails - THIS
 - if the var is declared here, the present file loads without problems, but the test fails inside lfjTests.js with error message "MAmaComp is not a function" */
 var MAmaComp = function(MALE) { return (MALE(MALE))}
 	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
+
+/* NB - second attempt at the extraction of make-length(make-length) from its outer function see page 171. MAmaFun(List('a','b','c')) = 3
+Instead of "lenght" (which is what the book does) I am calling it an "outer function", shortened in "oFun".
+There is a test "TestProtoCombinatorOfun" inside lfjTests.js and it works - THIS CRAZY FUNCTION WORKS!!!  
+... BUT AGAIN 
+... HAVE A LOOK AT THIS ONCE MORE STRANGE BEHAVIOR:
+- if MAmaOfun is declared here, the test in lfjTests.js fails ("MAmaOfun is not a function")
+- if MAmaOfun is declared inside the test, everything is fine (see MAmaOfunLocal inside lfjTests.js)
+*/
+var MAmaOfun = function(MALE) { return MALE(MALE)}  // MALE = make-length in outer loop
+	(function(male){return function(oFun) { return function(list){return isEmpty(list)?0:1+oFun(cdr(list))}}(function(x){return male(male)(x)})});  // male = make-length in inner loop
+
 
 
 
