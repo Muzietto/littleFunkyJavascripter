@@ -215,6 +215,30 @@ YAHOO.LFJ.test.oTestEvensOnlyStarAndCo = new YAHOO.tool.TestCase({
 	}
 });
 
+YAHOO.LFJ.test.oTestProtoCombinator = new YAHOO.tool.TestCase({
+	name : "TestProtoCombinator",
+	testProtoCombinator : function() {
+		var apples = ArrayToList(['a','p','p','l','e','s','a','p','p','l','e','s']);
+		Assert.areEqual(12,MAma(apples));
+	}
+});
+
+YAHOO.LFJ.test.oTestProtoCombinatorComp = new YAHOO.tool.TestCase({
+	name : "TestProtoCombinatorComp",
+	testProtoCombinatorComp : function() {
+		var apples = ArrayToList(['a','p','p','l','e','s','a','p','p','l','e','s']);
+		/* see lines around 170 in littleFunkyJavascripter.js */
+		//function MAmaComp(MALE) { return (MALE(MALE))}
+		//	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
+		try{
+			var result = MAmaComp(apples)
+			Assert.isTrue(false, 'MAmaComp should be either not-a-function or be causing too much recursion')
+		} catch (err) {
+			Assert.isTrue(true)
+		}		
+	}
+});
+
 YAHOO.util.Event
 		.onDOMReady(function() {
 		
@@ -259,6 +283,11 @@ YAHOO.util.Event
 					.add(YAHOO.LFJ.test.oTestEvensOnlyStar);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestEvensOnlyStarAndCo);
+
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestProtoCombinator);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestProtoCombinatorComp);
 
 					var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
 			logger.hideCategory("info");

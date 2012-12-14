@@ -159,6 +159,27 @@ function evensOnlyStar(list) {
 	else return cons(evensOnlyStar(car(list)),evensOnlyStar(cdr(list)))
 }
 
+// chapter 9
+/* NB - the following function is the definition of length given at page 167. MAma(List('a','b','c')) = 3
+There is a test "TestProtoCombinator" inside lfjTests.js and it works - THIS CRAZY FUNCTION WORKS!!!
+...BUT HAVE A LOOK AT THIS STRANGE BEHAVIOR:
+- if this function is declared as function MAma(MALE) it fails inside lfjTests.js with error message "w is not a function" at the first application of a cons 
+- if is function is declared as var, then everything is fine  */
+var MAma = function(MALE) { return MALE(MALE)}  // MALE = make-length in outer loop
+	(function(male){return function(list){return isEmpty(list)?0:1+male(male)(cdr(list))}});  // male = make-length in inner loop
+
+/* NB - the following function is the attempt at page 168 to extract 
+make-length(make-length) from the innermost loop. This function is shown to generate an infinite loop 
+I am calling male(male) a "composite", shortened in "comp".
+There is a test "TestProtoCombinatorComp" inside lfjTests.js and it fails - THIS FUNCTION WON'T WORK!!!
+... BUT HAVE A LOOK AT THIS OTHERWISE STRANGE BEHAVIOR:
+- the need to declare it as var (see previous function MAma) still stands
+- if the var is declared inside lfjTests.js instead of here, the test fails inside lfjTests.js with correct error message "too much recursion". 
+  The failure happens during the DEFINITION of the var, not during its later invocation.
+- if the var is declared here, the present file loads without problems, but the test fails inside lfjTests.js with error message "MAmaComp is not a function" */
+var MAmaComp = function(MALE) { return (MALE(MALE))}
+	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
+
 
 
 
