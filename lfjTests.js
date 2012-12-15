@@ -215,6 +215,7 @@ YAHOO.LFJ.test.oTestEvensOnlyStarAndCo = new YAHOO.tool.TestCase({
 	}
 });
 
+/* here begin the test regarding chapter 9 */ 
 YAHOO.LFJ.test.oTestProtoCombinator = new YAHOO.tool.TestCase({
 	name : "TestProtoCombinator",
 	testProtoCombinator : function() {
@@ -223,6 +224,9 @@ YAHOO.LFJ.test.oTestProtoCombinator = new YAHOO.tool.TestCase({
 	}
 });
 
+/* NB - the following function is the attempt at page 168 to extract 
+make-length(make-length) from the innermost loop. This function is shown to generate an infinite loop 
+Instead of "lenght" (which is what the book does) I am calling male(male) a "composite", shortened in "comp".*/
 YAHOO.LFJ.test.oTestProtoCombinatorComp = new YAHOO.tool.TestCase({
 	name : "TestProtoCombinatorComp",
 	testProtoCombinatorComp : function() {
@@ -253,6 +257,100 @@ YAHOO.LFJ.test.oTestProtoCombinatorOfun = new YAHOO.tool.TestCase({
 		} catch (err) {
 			Assert.isTrue(true)
 		}		
+	}
+});
+
+/* and here is my Y combinator - variables are named in a meaningful way, rather than x x x everywhere */ 
+YAHOO.LFJ.test.oTestMyYCombinator = new YAHOO.tool.TestCase({
+	name : "TestMyYCombinator",
+	testMyYCombinator : function() {
+		var MyY = function(worker) { return function(MALE) { return MALE(MALE) }  // MALE = make-length in combinator function
+			(function (male) {  // male = make-length in argument function
+				return worker(function(x){return male(male)(x)})
+			})
+		}
+		var apples = ArrayToList(['a','p','p','l','e','s','a','p','p','l','e','s']);
+		var lengthWorker = function(oFun) { 
+			return function(list){
+				return isEmpty(list)?0:1+oFun(cdr(list)); 
+			}
+		}
+		var myLength = MyY(lengthWorker)
+		Assert.areEqual(12,myLength(apples));
+
+		var factorialWorker = function(oFun) {
+			return function(n) {
+				return (n === 0) ? 1 : n * oFun(n - 1);
+			}
+		}
+		var myFactorial = MyY(factorialWorker)
+		Assert.areEqual(24,myFactorial(4));
+	}
+});
+
+/* this is an exercise with the functions that plug into a Y combinator */
+YAHOO.LFJ.test.oTestFactorialWorker = new YAHOO.tool.TestCase({
+	name : "TestFactorialWorker",
+	testFactorialWorker : function() {
+		/* 1) a plain factorial does its job (obviously) */
+		var plainFactorial = function(n) {
+			return (n==0) ? 1 : n*plainFactorial(n-1)
+		}
+		Assert.areEqual(120,plainFactorial(5));
+		
+		/* 2) a factorialWorker was born to be given as argument to a Y combinator */
+		var factorialWorker = function (partial) {
+			return function(n){
+				return (n==0) ? 1 : n*partial(n-1)
+			}
+		}
+		var MyY = function(worker) { return function(MALE) { return MALE(MALE) }
+			(function (male) {
+				return worker(function(x){return male(male)(x)})
+			})
+		}
+		Assert.areEqual(120,MyY(factorialWorker)(5));
+
+		/* 3) assigning a plain factorial to a factorialWorker you get back ... a factorial function!! */
+		Assert.areEqual(120,factorialWorker(plainFactorial)(5));
+		
+		/* as Jim Weirich (http://www.infoq.com/presentations/Y-Combinator) says:
+			- a recursive function is the fixed point of its own worker(*)
+			- the Y combinator calculates the fixed points of a worker function
+			- the Y combinator is the fixpoint combinator
+		(*) Jim Weirich calls it an "improver" 
+		*/		
+	}
+	
+});
+
+/* This is a verification of the ways if doing refactoring mentioned in http://www.infoq.com/presentations/Y-Combinator */
+YAHOO.LFJ.test.oTestFunctionalRefactorings = new YAHOO.tool.TestCase({
+	name : "TestFunctionalRefactorings",
+	testFunctionalRefactorings : function() {
+		/* here is the fixture */
+		var gi = function(x) {return 'gi-' + x}
+		Assert.areEqual('gi-pippo',gi('pippo'));
+
+		/* 1) Tennent Correspondence Principle - wrapping a function and immediately invoking the wrapper returns the original function */
+		var teCoPrGi = function(){return gi}
+		Assert.areEqual(gi('pippo'),teCoPrGi()('pippo'));
+		
+		/* 2) Introduce Binding -  I may introduce a new variable as long as it's not bound elsewhere */
+		var inBiGi = function(toBeBound){return gi}		
+		Assert.areEqual(gi('pippo'),inBiGi('value given to the variable to be bound but blatantly ignored')('pippo'));
+		
+		/* 3) [Invisible] Wrapper Function - wraps and returns the application to itself of the original function */
+		var wrapperGi = function(v){return (gi)(v)}
+		Assert.areEqual(gi('pippo'),wrapperGi('pippo'));
+		
+		/* 4) Inline Function - anonymous bonanza */
+		var teCoPrGiInline = function(){return function(x) {return 'gi-' + x}}
+		Assert.areEqual(gi('pippo'),teCoPrGiInline()('pippo'));
+		var inBiGiInline = function(toBeBound){return function(x) {return 'gi-' + x}}		
+		Assert.areEqual(gi('pippo'),inBiGiInline('value given to the variable to be bound but blatantly ignored')('pippo'));
+		var wrapperGiInline = function(v){return (function(x) {return 'gi-' + x})(v)}
+		Assert.areEqual(gi('pippo'),wrapperGiInline('pippo'));
 	}
 });
 
@@ -307,6 +405,13 @@ YAHOO.util.Event
 					.add(YAHOO.LFJ.test.oTestProtoCombinatorComp);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestProtoCombinatorOfun);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestMyYCombinator);
+
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestFactorialWorker);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestFunctionalRefactorings);
 
 					var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
 			logger.hideCategory("info");
@@ -314,5 +419,6 @@ YAHOO.util.Event
 			YAHOO.tool.TestRunner
 					.add(YAHOO.LFJ.test.LFJ_TestSuite);
 
+			YAHOO.tool.TestRunner.run();
 		});
 

@@ -180,7 +180,7 @@ There is a test "TestProtoCombinatorComp" inside lfjTests.js and it fails - THIS
 var MAmaComp = function(MALE) { return (MALE(MALE))}
 	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
 
-/* NB - second attempt at the extraction of make-length(make-length) from its outer function see page 171. MAmaFun(List('a','b','c')) = 3
+/* NB - second attempt at the extraction of make-length(make-length) from its outer function - see page 171. MAmaFun(List('a','b','c')) = 3
 Instead of "lenght" (which is what the book does) I am calling it an "outer function", shortened in "oFun".
 There is a test "TestProtoCombinatorOfun" inside lfjTests.js and it works - THIS CRAZY FUNCTION WORKS!!!  
 ... BUT AGAIN 
@@ -188,10 +188,45 @@ There is a test "TestProtoCombinatorOfun" inside lfjTests.js and it works - THIS
 - if MAmaOfun is declared here, the test in lfjTests.js fails ("MAmaOfun is not a function")
 - if MAmaOfun is declared inside the test, everything is fine (see MAmaOfunLocal inside lfjTests.js)
 */
-var MAmaOfun = function(MALE) { return MALE(MALE)}  // MALE = make-length in outer loop
-	(function(male){return function(oFun) { return function(list){return isEmpty(list)?0:1+oFun(cdr(list))}}(function(x){return male(male)(x)})});  // male = make-length in inner loop
+var MAmaOfun = function(MALE) { return MALE(MALE)}  // MALE = make-length in combinator function
+	(function(male){
+		return function(oFun) { 
+			return function(list){
+				return isEmpty(list)?0:1+oFun(cdr(list)); 
+			}
+		}(function(x){return male(male)(x)})
+	});  // male = make-length in argument function
 
+/* ...and here is my version of the Y combinator 
+  Once more, it works only if it is declared in the same .js file in which it gets invoked 
+    Examples of workers are given hereafter */
+var MyY = function(worker) { return function(MALE) { return MALE(MALE) }
+	(function (male) {
+		return worker(function(x){return male(male)(x)})
+	})
+}
 
+/* factorialWorker - THIS IS NOT A TRUE FACTORIAL FUNCTION. 
+     It is a function that returns a factorial function once assigned to a Y combinator */
+var factorialWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
+	return function(n) {
+		return (n === 0) ? 1 : n * whateverTheYCombinatorDeemsFitForThePurpose(n - 1);
+	}
+}
 
+/* lengthWorker - THIS IS NOT A TRUE LENGTH FUNCTION. 
+     It is a function that returns a length function once assigned to a Y combinator */
+var lengthWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
+	return function(list) {
+		return (isEmpty(list) ? EMPTY : 1 + whateverTheYCombinatorDeemsFitForThePurpose(cdr(list)))
+	}
+} 
 
-
+/* What does the Y combinator deem fit for the purpose? It chooses a fixed-point of its own argument function bla bla bla
+  But there's an interesting little thing - each worker accepts always ONE function by default: 
+  try assigning a plain factorial  or length function to te respective worker and you get ...
+  ...a factorial or a length function  back!
+ Basically, a plain factorial is the fixed-point function of its own worker; in other words: worker(plain) = plain, just as fixed-point(x)=x
+  Here are the ingredients. Tests are inside lfjTests.js */
+var plainFactorial = function(n) {return (n===0)?1:n*plainFactorial(n-1)}
+var plainLength = function(list) {return (isEmpty(list))?EMPTY:1+plainLength(cdr(list))}
