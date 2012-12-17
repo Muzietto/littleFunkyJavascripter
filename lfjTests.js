@@ -5,12 +5,36 @@ YAHOO.namespace('LFJ.test');
 
 var Assert = YAHOO.util.Assert;
 
+// which chapter?
 YAHOO.LFJ.test.oTestIsLat = new YAHOO.tool.TestCase({
 	name : "TestIsLat",
 	testIsLat : function() {
 		Assert.isTrue(isLat(List()))
 		Assert.isTrue(isLat(List('a','b')))
 		Assert.isFalse(isLat(ArrayToList([['a'],'b'])))
+	}
+});
+
+// which chapter?
+YAHOO.LFJ.test.oTestTupleManagement = new YAHOO.tool.TestCase({
+	name : "TestTupleManagement",
+	testTupleManagement : function() {
+		var myTuple = build('a','b')
+		Assert.isTrue(size(myTuple)===2)
+		Assert.areEqual('a', first(myTuple))
+		Assert.areEqual('b', second(myTuple))
+		try{
+			first(cons('c',myTuple))
+			Assert.isTrue(false,'first should refuse lists of three!')
+		}catch(err){
+			Assert.areEqual('Not a tuple!',err)
+		}
+		try{
+			second(cons('c',myTuple))
+			Assert.isTrue(false,'second should refuse lists of three!')
+		}catch(err){
+			Assert.areEqual('Not a tuple!',err)
+		}
 	}
 });
 
@@ -232,15 +256,16 @@ YAHOO.LFJ.test.oTestProtoCombinatorComp = new YAHOO.tool.TestCase({
 	testProtoCombinatorComp : function() {
 		var apples = ArrayToList(['a','p','p','l','e','s','a','p','p','l','e','s']);
 		/* see lines around 170 in littleFunkyJavascripter.js */
-		//function MAmaComp(MALE) { return (MALE(MALE))}
-		//	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
+/*		
+		var MAmaComp = function(MALE) { return (MALE(MALE))}
+			(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
 		try{
 			var result = MAmaComp(apples)
 			Assert.isTrue(false, 'MAmaComp should be either not-a-function or be causing too much recursion')
 		} catch (err) {
 			Assert.isTrue(true)
 		}		
-	}
+*/	}
 });
 
 YAHOO.LFJ.test.oTestProtoCombinatorOfun = new YAHOO.tool.TestCase({
@@ -251,13 +276,13 @@ YAHOO.LFJ.test.oTestProtoCombinatorOfun = new YAHOO.tool.TestCase({
 		var MAmaOfunLocal = function(MALE) { return MALE(MALE)}  // definition inside this test will work
 			(function(male){return function(oFun) { return function(list){return isEmpty(list)?0:1+oFun(cdr(list))}}(function(x){return male(male)(x)})});  // male = make-length in inner loop
 		Assert.areEqual(12,MAmaOfunLocal(apples));
-		try{  // using the definition in the library file
+/*		try{  // using the definition in the library file
 			var result = MAmaOfun(apples)   // definition outside this test will NOT work!
 			Assert.isTrue(false, 'MAmaOfun should be not-a-function')
 		} catch (err) {
 			Assert.isTrue(true)
-		}		
-	}
+		}
+*/	}
 });
 
 /* and here is my Y combinator - variables are named in a meaningful way, rather than x x x everywhere */ 
@@ -354,6 +379,28 @@ YAHOO.LFJ.test.oTestFunctionalRefactorings = new YAHOO.tool.TestCase({
 	}
 });
 
+// Chapter 10
+YAHOO.LFJ.test.oTestSSS = new YAHOO.tool.TestCase({
+	name : "TestSSS",
+	testSSS : function() {
+		var alal = function(xxx){alert(xxx)}
+		var myTuple = new_entry('a','b')
+		Assert.isTrue(size(myTuple)===2)
+		Assert.areEqual('a', keys(myTuple))
+		Assert.areEqual('b', values(myTuple))
+		
+		var myEntry = new_entry(atl(['key1','key2','key3']),atl(['val1','val2','val2']))
+		Assert.areEqual('val2',lookup_in_entry('key2',myEntry,alal))
+		Assert.areEqual('val2',lookup_in_entry('key3',car(extend_table(myEntry,EMPTY)),alal))
+		var myEntry2 = new_entry(atl(['key11','key2']),atl(['val11','will_be_found']))
+		var myTable = extend_table(myEntry2,extend_table(myEntry,EMPTY))
+		Assert.areEqual('val11',lookup_in_table('key11',myTable,alal))
+		Assert.areEqual('will_be_found',lookup_in_table('key2',myTable,alal))
+		
+		
+	}
+});
+
 YAHOO.util.Event
 		.onDOMReady(function() {
 		
@@ -377,7 +424,7 @@ YAHOO.util.Event
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestUnion);
 
-			YAHOO.LFJ.test.LFJ_TestSuite
+					YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestIsLat);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestPick);
@@ -413,7 +460,13 @@ YAHOO.util.Event
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestFunctionalRefactorings);
 
-					var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestTupleManagement);
+					
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestSSS);
+
+			var logger = new YAHOO.tool.TestLogger("testLogger_LFJ");
 			logger.hideCategory("info");
 
 			YAHOO.tool.TestRunner

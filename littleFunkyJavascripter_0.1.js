@@ -2,10 +2,22 @@
 */
 function car(cons) { return cons(function(x,y){return x})}
 function cdr(cons) { return cons(function(x,y){return y})}
+function atl(arr) { return ArrayToList(arr)}
 
 // list of atoms
 function isLat(list) {
 	return isEmpty(list) || ((typeof(car(list)) !== "function") && isLat(cdr(list)))
+}
+
+// tuples management 
+function build(first, second) {return cons(first,cons(second,EMPTY))}
+function first(tuple) { 
+	if (size(tuple)!==2) throw 'Not a tuple!'
+	else return car(tuple)
+}
+function second(tuple) { 
+	if (size(tuple)!==2) throw 'Not a tuple!'
+	else return car(cdr(tuple))
 }
 
 // chapter 4
@@ -177,9 +189,10 @@ There is a test "TestProtoCombinatorComp" inside lfjTests.js and it fails - THIS
 - if the var is declared inside lfjTests.js instead of here, the test fails inside lfjTests.js with correct error message "too much recursion". 
   The failure happens during the DEFINITION of the var, not during its later invocation.
 - if the var is declared here, the present file loads without problems, but the test fails inside lfjTests.js with error message "MAmaComp is not a function" */
+/* commented out - causes a call stack overflow that blips the debugger of Firebog
 var MAmaComp = function(MALE) { return (MALE(MALE))}
 	(function(male){return function(comp){ return function(list){return isEmpty(list)?0:1+comp(cdr(list))}}(male(male))});
-
+*/
 /* NB - second attempt at the extraction of make-length(make-length) from its outer function - see page 171. MAmaFun(List('a','b','c')) = 3
 Instead of "lenght" (which is what the book does) I am calling it an "outer function", shortened in "oFun".
 There is a test "TestProtoCombinatorOfun" inside lfjTests.js and it works - THIS CRAZY FUNCTION WORKS!!!  
@@ -188,6 +201,7 @@ There is a test "TestProtoCombinatorOfun" inside lfjTests.js and it works - THIS
 - if MAmaOfun is declared here, the test in lfjTests.js fails ("MAmaOfun is not a function")
 - if MAmaOfun is declared inside the test, everything is fine (see MAmaOfunLocal inside lfjTests.js)
 */
+/* commented out - causes a call stack overflow that blips the debugger of Firebog
 var MAmaOfun = function(MALE) { return MALE(MALE)}  // MALE = make-length in combinator function
 	(function(male){
 		return function(oFun) { 
@@ -196,16 +210,17 @@ var MAmaOfun = function(MALE) { return MALE(MALE)}  // MALE = make-length in com
 			}
 		}(function(x){return male(male)(x)})
 	});  // male = make-length in argument function
-
+*/
 /* ...and here is my version of the Y combinator 
   Once more, it works only if it is declared in the same .js file in which it gets invoked 
     Examples of workers are given hereafter */
+/* commented out - causes a call stack overflow that blips the debugger of Firebog
 var MyY = function(worker) { return function(MALE) { return MALE(MALE) }
 	(function (male) {
 		return worker(function(x){return male(male)(x)})
 	})
 }
-
+*/
 /* factorialWorker - THIS IS NOT A TRUE FACTORIAL FUNCTION. 
      It is a function that returns a factorial function once assigned to a Y combinator */
 var factorialWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
@@ -230,3 +245,50 @@ var lengthWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
   Here are the ingredients. Tests are inside lfjTests.js */
 var plainFactorial = function(n) {return (n===0)?1:n*plainFactorial(n-1)}
 var plainLength = function(list) {return (isEmpty(list))?EMPTY:1+plainLength(cdr(list))}
+
+// Chapter 10
+var new_entry = build
+function keys(tuple) { if (size(tuple)!==2) throw 'Not a tuple!'; else return car(tuple);}
+function values(tuple) { if (size(tuple)!==2) throw 'Not a tuple!'; else return car(cdr(tuple));}
+var extend_table = cons
+
+function lookup_in_entry(name, entry, entry_f){
+	function lookup_in_entry_help(name,names,values,entry_f){
+		if (isEmpty(names)) return entry_f(name)
+		else if (car(names)===name) return car(values)
+		else return lookup_in_entry_help(name,cdr(names),cdr(values),entry_f)
+	}
+	return lookup_in_entry_help(name,first(entry),second(entry),entry_f)
+}
+
+function lookup_in_table(name, table, entry_f){
+	if (isEmpty(table)) return entry_f(name)
+	else return lookup_in_entry(name,car(table),
+		function(name){
+			return lookup_in_table(name,cdr(table),entry_f)
+		})
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
