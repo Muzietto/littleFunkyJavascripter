@@ -90,7 +90,7 @@ function isIntersection(set1, set2){
 }
 
 function intersection(set1,set2) {
-	if (isEmpty(set1)) return Nil;
+	if (isEmpty(set1)) return EMPTY;
 	else if (isMember(head(set1),set2)) return cons(head(set1),intersection(tail(set1),set2));
 	else return intersection(tail(set1),set2);
 }
@@ -99,6 +99,13 @@ function union(set1,set2){
 	if (isEmpty(set1)) return set2;
 	else if (isMember(head(set1),set2)) return union(tail(set1),set2);
 	else return cons(head(set1),union(tail(set1),set2));
+}
+
+function intersectall(l_set){
+	if (isEmpty(cdr(l_set))) {
+		return car(l_set);
+	}
+	else return intersection(car(l_set),intersectall(cdr(l_set)));
 }
 
 // chapter 8

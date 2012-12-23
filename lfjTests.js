@@ -105,28 +105,39 @@ YAHOO.LFJ.test.oTestIsIntersection = new YAHOO.tool.TestCase({
 YAHOO.LFJ.test.oTestIntersection = new YAHOO.tool.TestCase({
 	name : "TestIntersection",
 	testIntersection : function() {
-		Assert.areEqual('List(a)',consToString(intersection(List('a'),List('a'))))
-		Assert.areEqual('List()',consToString(intersection(List(),List())))
-		Assert.areEqual('List()',consToString(intersection(List('a'),List('b'))))
-		Assert.areEqual('List()',consToString(intersection(List('a'),List())))
-		Assert.areEqual('List()',consToString(intersection(List(),List('a'))))
-		Assert.areEqual('List(a,b)',consToString(intersection(List('a','b','c'),List('b','a'))))
-		Assert.areEqual('List()',consToString(intersection(List('a','b','c'),List('x','y','z'))))
-		Assert.areEqual('List(c)',consToString(intersection(List('a','b','c'),List('x','c','z'))))
+		Assert.areEqual('[a]',consToString(intersection(List('a'),List('a'))))
+		Assert.areEqual('[]',consToString(intersection(List(),List())))
+		Assert.areEqual('[]',consToString(intersection(List('a'),List('b'))))
+		Assert.areEqual('[]',consToString(intersection(List('a'),List())))
+		Assert.areEqual('[]',consToString(intersection(List(),List('a'))))
+		Assert.areEqual('[a,b]',consToString(intersection(List('a','b','c'),List('b','a'))))
+		Assert.areEqual('[]',consToString(intersection(List('a','b','c'),List('x','y','z'))))
+		Assert.areEqual('[c]',consToString(intersection(List('a','b','c'),List('x','c','z'))))
+	}
+});
+
+YAHOO.LFJ.test.oTestIntersectall = new YAHOO.tool.TestCase({
+	name : "TestIntersectall",
+	testIntersectall : function() {
+		var input = ArrayToList([['a','b','c'],['c','a','d','e'],['e','f','g','h','a','b']]);		
+		Assert.isTrue(eqlist(ArrayToList(['a']),intersectall(input)),'input')
+
+		var input2 = ArrayToList([[6,'pears','and'],[3,'peaches','and',6,'peppers'],[8,'pears','and',6,'plums'],['and',6,'prunes','with','some','apples']]);		
+		Assert.isTrue(eqlist(ArrayToList([6,'and']),intersectall(input2)),'input2')
 	}
 });
 
 YAHOO.LFJ.test.oTestUnion = new YAHOO.tool.TestCase({
 	name : "TestUnion",
 	testUnion : function() {
-		Assert.areEqual('List(a)',consToString(union(List('a'),List('a'))))
-		Assert.areEqual('List()',consToString(union(List(),List())))
-		Assert.areEqual('List(a,b)',consToString(union(List('a'),List('b'))))
-		Assert.areEqual('List(a)',consToString(union(List('a'),List())))
-		Assert.areEqual('List(a)',consToString(union(List(),List('a'))))
-		Assert.areEqual('List(c,b,a)',consToString(union(List('a','b','c'),List('b','a'))))
-		Assert.areEqual('List(a,b,c,x,y,z)',consToString(union(List('a','b','c'),List('x','y','z'))))
-		Assert.areEqual('List(a,b,x,c,z)',consToString(union(List('a','b','c'),List('x','c','z'))))
+		Assert.areEqual('[a]',consToString(union(List('a'),List('a'))))
+		Assert.areEqual('[]',consToString(union(List(),List())))
+		Assert.areEqual('[a,b]',consToString(union(List('a'),List('b'))))
+		Assert.areEqual('[a]',consToString(union(List('a'),List())))
+		Assert.areEqual('[a]',consToString(union(List(),List('a'))))
+		Assert.areEqual('[c,b,a]',consToString(union(List('a','b','c'),List('b','a'))))
+		Assert.areEqual('[a,b,c,x,y,z]',consToString(union(List('a','b','c'),List('x','y','z'))))
+		Assert.areEqual('[a,b,x,c,z]',consToString(union(List('a','b','c'),List('x','c','z'))))
 	}
 });
 
@@ -147,7 +158,7 @@ YAHOO.LFJ.test.oTestMakeset = new YAHOO.tool.TestCase({
 		Assert.isTrue(isMember('a',madeset));
 		Assert.isTrue(isMember('b',madeset));
 		Assert.areEqual(2,size(madeset));
-		Assert.areEqual('List(b,a)', consToString(madeset));
+		Assert.areEqual('[b,a]', consToString(madeset));
 	}
 });
 
@@ -423,8 +434,10 @@ YAHOO.util.Event
 					.add(YAHOO.LFJ.test.oTestIntersection);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestUnion);
+			YAHOO.LFJ.test.LFJ_TestSuite
+					.add(YAHOO.LFJ.test.oTestIntersectall);
 
-					YAHOO.LFJ.test.LFJ_TestSuite
+			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestIsLat);
 			YAHOO.LFJ.test.LFJ_TestSuite
 					.add(YAHOO.LFJ.test.oTestPick);
