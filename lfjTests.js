@@ -119,9 +119,9 @@ YAHOO.LFJ.test.oTestIntersection = new YAHOO.tool.TestCase({
 YAHOO.LFJ.test.oTestIntersectall = new YAHOO.tool.TestCase({
 	name : "TestIntersectall",
 	testIntersectall : function() {
+		Assert.isTrue(eqlist(EMPTY,intersectall(EMPTY)),'empty set')  // added after reading Seasoned Schemer, page 38
 		var input = ArrayToList([['a','b','c'],['c','a','d','e'],['e','f','g','h','a','b']]);		
 		Assert.isTrue(eqlist(ArrayToList(['a']),intersectall(input)),'input')
-
 		var input2 = ArrayToList([[6,'pears','and'],[3,'peaches','and',6,'peppers'],[8,'pears','and',6,'plums'],['and',6,'prunes','with','some','apples']]);		
 		Assert.isTrue(eqlist(ArrayToList([6,'and']),intersectall(input2)),'input2')
 	}

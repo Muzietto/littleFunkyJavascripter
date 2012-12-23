@@ -102,9 +102,8 @@ function union(set1,set2){
 }
 
 function intersectall(l_set){
-	if (isEmpty(cdr(l_set))) {
-		return car(l_set);
-	}
+	if (isEmpty(l_set)) return EMPTY;  // added after reading Seasoned Schemer, page 38
+	else if (isEmpty(cdr(l_set))) return car(l_set);
 	else return intersection(car(l_set),intersectall(cdr(l_set)));
 }
 
