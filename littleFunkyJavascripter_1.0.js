@@ -1,5 +1,13 @@
-/* a few implementations from the Little Schemer
+/*
+	LittleFunkyJavascripter - a few implementations from the Little Schemer
+	Author: Marco Faustinelli (contacts@faustinelli.net)
+	Web: http://faustinelli.net/
+	     http://faustinelli.wordpress.com/
+	Version: 1.0
+
+	The MIT License - Copyright (c) 2012 LittleFunkyJavascripter Project
 */
+
 function car(cons) { return cons(function(x,y){return x})}
 function cdr(cons) { return cons(function(x,y){return y})}
 function atl(arr) { return ArrayToList(arr)}
@@ -245,7 +253,7 @@ var lengthWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
 
 /* What does the Y combinator deem fit for the purpose? It chooses a fixed-point of its own argument function bla bla bla
   But there's an interesting little thing - each worker accepts always ONE function by default: 
-  try assigning a plain factorial  or length function to te respective worker and you get ...
+  try assigning a plain factorial  or length function to the respective worker and you get ...
   ...a factorial or a length function  back!
  Basically, a plain factorial is the fixed-point function of its own worker; in other words: worker(plain) = plain, just as fixed-point(x)=x
   Here are the ingredients. Tests are inside lfjTests.js */

@@ -1,4 +1,11 @@
-/* a few implementations from the Little Schemer
+/*
+	LittleFunkyJavascripter - a few implementations from the Little Schemer
+	Author: Marco Faustinelli (contacts@faustinelli.net)
+	Web: http://faustinelli.net/
+	     http://faustinelli.wordpress.com/
+	Version: 1.0
+
+	The MIT License - Copyright (c) 2012 LittleFunkyJavascripter Project
 */
 
 YAHOO.namespace('LFJ.test');
