@@ -253,14 +253,14 @@ var lengthWorker = function(whateverTheYCombinatorDeemsFitForThePurpose) {
 
 /* What does the Y combinator deem fit for the purpose? It chooses a fixed-point of its own argument function bla bla bla
   But there's an interesting little thing - each worker accepts always ONE function by default: 
-  try assigning a plain factorial  or length function to the respective worker and you get ...
-  ...a factorial or a length function  back!
+  try assigning a plain factorial or length function to the respective worker and you get...
+  ...a factorial or a length function back!
  Basically, a plain factorial is the fixed-point function of its own worker; in other words: worker(plain) = plain, just as fixed-point(x)=x
   Here are the ingredients. Tests are inside lfjTests.js */
 var plainFactorial = function(n) {return (n===0)?1:n*plainFactorial(n-1)}
 var plainLength = function(list) {return (isEmpty(list))?EMPTY:1+plainLength(cdr(list))}
 
-// Chapter 10
+// Chapter 10 (work in progress)
 var new_entry = build
 function keys(tuple) { if (size(tuple)!==2) throw 'Not a tuple!'; else return car(tuple);}
 function values(tuple) { if (size(tuple)!==2) throw 'Not a tuple!'; else return car(cdr(tuple));}
@@ -282,27 +282,3 @@ function lookup_in_table(name, table, entry_f){
 			return lookup_in_table(name,cdr(table),entry_f)
 		})
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
