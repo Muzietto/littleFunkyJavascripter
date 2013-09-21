@@ -1,8 +1,7 @@
 Little Funky Javascripter
 =========================
-
-This is an implementation of the operations described in the Little Schemer. It uses only
-crisp clear Javascript lists; no arrays whatsoever in the way. Everything is a function.
+This is an implementation of the operations described in the Little Schemer (well, with the exception of chapter 10).
+It uses only crisp clear Javascript binary tree lists; no JS arrays whatsoever in the way. Everything is a function.
 
 Why is all this relevant? Because it's ALL FUNCTIONAL.
 
