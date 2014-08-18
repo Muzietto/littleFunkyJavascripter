@@ -29,7 +29,7 @@ The engine behind all this is contained in the companion repository: https://git
 
 DEBITS AND CREDITS
 ------------------
-I know this Javascript code is just a bunch of global stuff, but it's not meant to be used in any other way that a study aid.
+I know this Javascript code is just a bunch of global stuff, but it's not meant to be used in any other way than as a study aid.
 
 I am in debt of course with Daniel P. Friedman, Matthias Felleisen and Duane Bibby 
 (the last one for all those cute elephants...)
