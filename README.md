@@ -19,7 +19,8 @@ waiting for some op-erator to come and do something using them as arguments for 
 The catch of using only functions is that JS is not optimized for recurring on closures(***).
 That's what makes all this an insightful albeit fruitless exercise.
 
-A complete test suite using YUI is enclosed. Whilst debugging, the method <cons>.c shows a pretty print of the current list.
+Download the whole lot, double click on the HTML file and let mocha do the talking.
+Whilst debugging, the method <cons>.c shows a pretty print of the current list.
 
 Companion project - GEIESLISTS
 ------------------------------

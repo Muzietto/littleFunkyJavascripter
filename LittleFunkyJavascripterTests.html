@@ -1,0 +1,40 @@
+﻿<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+        <title>Little Funky Javascripter tests</title>
+        <link rel="stylesheet" type="text/css" href="js/lib/mocha.css">
+
+        <script type="text/javascript" src="js/lib/utils.js"></script>
+        <script type="text/javascript" src="js/lib/sinon-1.11.1.js"></script>
+        <script type="text/javascript" src="js/lib/chai.js"></script>
+        <script type="text/javascript" src="js/lib/mocha.js"></script>
+
+        <script>mocha.setup('bdd')</script>
+        <script>
+          function assert(expr, msg) {
+            if (!expr) throw new Error(msg || 'failed');
+          }
+        </script>
+
+        <script type="text/javascript" src="js/lib/geieslists_1.0.js"></script>
+        <script type="text/javascript" src="js/littleFunkyJavascripter_1.0.js"></script>
+        <script type="text/javascript" src="js/lfj_tests.js"></script>
+
+        <script type="text/javascript">
+              onload = function(){
+                var runner = mocha.run();
+                // runner.globals(['foo', 'bar', 'baz']);
+
+                // runner.on('test end', function(test){
+                //   console.log(test.fullTitle());
+                // });
+              };
+        </script>
+    </head>
+    <body>
+        <h1 style="margin-left:20px;">LittleFunkyJavascripter tests</h1>
+        <div id="mocha"></div>
+    </body>
+</html>
+ 
