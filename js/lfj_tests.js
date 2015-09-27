@@ -1,3 +1,13 @@
+/*
+	LittleFunkyJavascripter - a few implementations from the Little Schemer
+	Author: Marco Faustinelli (contacts@faustinelli.net)
+	Web: http://faustinelli.net/
+	     http://faustinelli.wordpress.com/
+	Version: 1.0
+
+	The MIT License - Copyright (c) 2012 LittleFunkyJavascripter Project
+*/
+
 var expect = chai.expect;
 
 describe('a fully functional JS implementation of the Little Schemer', function () {
