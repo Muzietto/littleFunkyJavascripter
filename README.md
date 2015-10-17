@@ -22,6 +22,8 @@ That's what makes all this an insightful albeit fruitless exercise.
 Download the whole lot, double click on the HTML file and let mocha do the talking.
 Whilst debugging, the method <cons>.c shows a pretty print of the current list.
 
+This project is presented [at my blog](https://faustinelli.wordpress.com/portfolio/the-little-funky-javascripter/)
+
 Companion project - GEIESLISTS
 ------------------------------
 The engine behind all this is contained in the companion repository: https://github.com/Muzietto/geieslists
