@@ -10,7 +10,7 @@ Why is all this relevant? Because it's ALL FUNCTIONAL.
 
 Please note that e.g. the Little Javascripter of Douglas Crockford is NOT fully functional, for example:
 
-	function cons(car, cdr) { return [car, cdr];} <-- This gives back a JS array
+	function cons(car, cdr) { return [car, cdr]; } <-- This gives back a mutable JS array
 
 whereas in this case (read later about the companion project) we have:
 
