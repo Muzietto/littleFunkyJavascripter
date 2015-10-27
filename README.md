@@ -16,8 +16,7 @@ whereas in this case (read later about the companion project) we have:
 
 	function cons(car, cdr) { return function(op) { return op(car, cdr); }; }
 
-which freezes `car`(\*) and `cdr`(**) inside a closure,
-waiting for some op-erator to come and do something using them as arguments for its own execution.
+which freezes `car`(\*) and `cdr`(**) inside a closure, waiting for some `op`erator to come and do something using them as arguments for its own execution.
 
 The catch of using only functions is that JS is not optimized for recurring on closures(***).
 That's what makes all this an insightful albeit fruitless exercise.
