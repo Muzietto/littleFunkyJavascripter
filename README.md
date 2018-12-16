@@ -6,6 +6,8 @@ Little Funky JavaScripter
 This is an implementation of the operations described in the Little Schemer (well, with the exception of chapter 10).
 It uses only crisp clear JavaScript binary tree lists; no JS arrays whatsoever in the way. Everything is a function.
 
+[Here](http://muzietto.github.io/littleFunkyJavascripter/LittleFunkyJavascripterTests.html) are the tests.
+
 Why is all this relevant? Because **it's ALL FUNCTIONAL**.
 
 Please note that e.g. the Little JavaScripter of Douglas Crockford is NOT fully functional, for example:
